@@ -1,0 +1,104 @@
+<h2><%= @plugin.id %> owned by <%= link_to_user @plugin.user %></h2>
+
+<div class="box tabular">
+
+<%= labelled_form_for @plugin, :url => plugin_path(@project.identifier, @plugin) do |p| %>
+<p><%= p.text_field :betasecret %></p>
+<p><%= p.text_field :downloadurl, :size => 75 %>
+<% if @plugin.downloadurl.length > 0 %>
+  <%= link_to('Ingest', {:controller => 'plugins', :project_id => @project, :id => @plugin, :action => :'ingest'}, :method => :post) %>
+<% end %>
+
+</p>
+<%= submit_tag l(:button_save) %>
+
+<% end %>
+</div>
+
+<p/>
+
+<% if @log.length > 0 %>
+
+<h2>Recent Changes</h2>
+
+<table class="list spmc-list">
+
+  <thead><tr>
+  <th>Event</th>
+  <th>When</th>
+  <th>By</th>
+  </tr></thead>
+
+  <tbody>
+    <% @log.each do |a| %>
+    <tr>
+      <td><%= a.info %></td>
+      <td><%= distance_of_time_in_words(Time.now, Time.at(a.created)) %> ago</td>
+      <td><%= link_to_user a.user %></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<% end %>
+
+<h2>Versions</h2>
+
+<table class="list spmc-list">
+  <thead><tr>
+  <th>Live</th>
+  <th>Version</th>
+  <th>Uploaded</th>
+  <th>Author</th>
+  <th>Downloads</th>
+  <th>Type</th>
+  <th>Category</th>
+  <th>Status</th>
+  <th>Published</th>
+<% if User.current.allowed_to?(:admin_plugins, @project) %>
+  <th></th>
+<% end %>
+  <th></th>
+  </tr></thead>
+
+  <tbody>
+<% @versions.each do |a| %>
+  <tr>
+    <td class="icon <%= a.published == 1 && a.status == 'a' ? 'spmc-icon-accept' : 'spmc-icon-stop' %>"><%= a.published && a.status == 'a' ? "Yes" : "No" %></td>
+    <td><%= a.version %></td>
+    <td><%= distance_of_time_in_words(Time.now, Time.at(a.created)) %> ago</td>
+    <td><%= a.author %></td>
+    <td><%= a.downloads %></td>
+    <td><%= a.type %></td>
+    <td><%= a.category %></td>
+    <td>
+      <%= {"a" => "Approved", "p" => "Pending", "r" => "Rejected"}[a.status] %>
+    </td>
+
+    <td>
+      <%= a.published == 1 ? "Yes" : "No" %>
+    </td>
+<% if User.current.allowed_to?(:admin_plugins, @project) %>
+    <td class="buttons">
+      <%= link_to('Approve',      {:controller => 'plugin_versions', :project_id => @project, :plugin_id => @plugin, :version => a.version, :action => :'approve'},   :method => :post) if a.status != 'a' %>
+      <%= link_to('Reject',       {:controller => 'plugin_versions', :project_id => @project, :plugin_id => @plugin, :version => a.version, :action => :'reject'},    :method => :post) if a.status != 'r' %>
+      <%= link_to('Make pending', {:controller => 'plugin_versions', :project_id => @project, :plugin_id => @plugin, :version => a.version, :action => :'pend'},      :method => :post) if a.status != 'p' %>
+    </td>
+<% end %>
+    <td class="buttons">
+      <%= link_to('Publish',   {:controller => 'plugin_versions', :project_id => @project, :plugin_id => @plugin, :version => a.version, :action => :'publish'},   :method => :post) if a.published == 0 %>
+      <%= link_to('Unpublish', {:controller => 'plugin_versions', :project_id => @project, :plugin_id => @plugin, :version => a.version, :action => :'unpublish'}, :method => :post) if a.published == 1 %>
+
+      <%= link_to('Delete',    {:controller => 'plugin_versions', :project_id => @project, :plugin_id => @plugin, :version => a.version, :action => :'delete'}, :data => {:confirm => l(:text_are_you_sure)}, :method => :post, :class => 'icon icon-del') %>
+    </td>
+  </tr>
+<% end %>
+
+    </tbody>
+</table>
+
+<% content_for :header_tags do %>
+    <%= stylesheet_link_tag 'spmc', :plugin => 'redmine_spmc' %>
+<% end %>
+
+<%= render :partial => 'sidebar' %>

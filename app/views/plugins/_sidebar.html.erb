@@ -1,0 +1,23 @@
+<% if User.current.allowed_to?(:edit_own_plugins, @project) %>
+
+<% content_for :sidebar do %>
+
+<h3>Plugin developer menu</h3>
+<%= link_to "Public plugins", { :controller => "plugins", :action => "index", :project_id  => @project}, :class => 'icon icon-folder'  %>
+<p>
+<%= link_to "My plugins", { :controller => "plugins", :action => "myplugins", :project_id  => @project} , :class => 'icon icon-user' %>
+<p>
+<%= link_to "Upload plugin package", {:controller => 'plugins', :action => 'upload', :project_id => @project}, :class => 'icon icon-add' %>
+<p>
+<%= link_to "My logfile", { :controller => "plugins", :action => "mylog", :project_id  => @project}, :class => 'icon icon-report' %>
+
+<% if User.current.allowed_to?(:admin_plugins, @project) %>
+
+<h3>Plugin administration</h3>
+<%= link_to "All plugins", { :controller => "plugins", :action => "allplugins", :project_id  => @project}, :class => 'icon icon-folder' %>
+<p>
+<%= link_to "Global log", { :controller => "plugins", :action => "globallog", :project_id  => @project}, :class => 'icon icon-report' %>
+<% end %>
+
+<% end %>
+<% end %>

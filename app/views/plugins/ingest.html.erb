@@ -1,0 +1,18 @@
+<% if(!@result.nil?) && @result['error'] %>
+<h2>Ingest failed:</h2>
+
+<pre style="background-color:#ff6666; border:2px; border-color:black; border-style:solid; padding: 5px; color:black">
+  <%= @result['result'] %>
+</pre>
+<% end %>
+
+<p>
+  Return to <%= link_to(@plugin.id, { :controller   => "plugins", :action       => "plugin", :project_id   => @project, :id => @plugin.id}) %>
+</p>
+
+<% content_for :header_tags do %>
+    <%= stylesheet_link_tag 'spmc', :plugin => 'redmine_spmc' %>
+<% end %>
+
+<%= render :partial => 'sidebar' %>
+

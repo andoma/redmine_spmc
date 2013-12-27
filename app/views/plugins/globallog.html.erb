@@ -1,0 +1,39 @@
+<h2>Log</h2>
+
+<table class="list spmc-list">
+
+  <thead><tr>
+  <th>Plugin</th>
+  <th>Event</th>
+  <th>When</th>
+  <th>By</th>
+  </tr></thead>
+
+  <tbody>
+    <% @logs.each do |a| %>
+    <tr>
+    <td>
+      <%= link_to(a.pluginid, {
+          :controller   => "plugins",
+          :action       => "plugin",
+          :project_id   => @project,
+          :id           => a.pluginid})
+      %>
+    </td>
+      <td><%= a.info %></td>
+      <td><%= distance_of_time_in_words(Time.now, Time.at(a.created)) %> ago</td>
+      <td><%= link_to_user a.user %></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
+
+
+<p class="pagination"><%= pagination_links_full(@logs_pages, @logs_count) %></p>
+
+<% content_for :header_tags do %>
+    <%= stylesheet_link_tag 'spmc', :plugin => 'redmine_spmc' %>
+<% end %>
+
+<%= render :partial => 'sidebar' %>
+

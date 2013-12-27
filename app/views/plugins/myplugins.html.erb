@@ -1,0 +1,42 @@
+<h2>Plugins owned by <%= link_to_user User.current %></h2>
+
+<table class="list spmc-list">
+
+  <thead><tr>
+  <th>ID</th>
+  <th>Latest upload</th>
+  <th>Latest uploaded version</th>
+  <th>Type</th>
+  <th>Category</th>
+  <th>Owner</th>
+</thead>
+<tbody>
+<% @plugins.each do |b| %>
+  <tr>
+    <td>
+      <%= link_to(b.title, {
+          :controller   => "plugins",
+          :action       => "plugin",
+          :project_id   => @project,
+          :id           => b.id})
+      %>
+    </td>
+    <td><%= distance_of_time_in_words(Time.now, Time.at(b.created)) %> ago</td>
+    <td><%= b.version %></td>
+    <td><%= b.type %></td>
+    <td><%= b.category %></td>
+    <td><%= link_to_user b.user %></td>
+    </td>
+  </tr>
+<% end %>
+</tbody>
+</table>
+
+<p class="pagination"><%= pagination_links_full(@plugins_pages, @plugins_count) %></p>
+
+<% content_for :header_tags do %>
+    <%= stylesheet_link_tag 'spmc', :plugin => 'redmine_spmc' %>
+<% end %>
+
+<%= render :partial => 'sidebar' %>
+

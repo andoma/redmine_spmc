@@ -1,0 +1,40 @@
+<h2>Available plugins</h2>
+
+<table border="0">
+<% @plugins.each do |b| %>
+
+  <tr height="84px">
+    <td width="84px">
+      <img src="<%= b.icon %>" style="float: left; max-width:64px; max-height: 64px; height: auto; width: 64px;  margin: 10px">
+    </td>
+    <td width="200px">
+      <div>
+        <strong><%= b.title %></strong>
+      </div>
+      <div>
+        Version <%= b.version %>
+      </div>
+      <div>
+        By: <%= b.author %>
+      </div>
+    </td>
+    <td>
+      <%= b.description.html_safe %>
+   </td>
+
+    <td class="buttons">
+      <%= link_to("Edit", {
+          :controller   => "plugins",
+          :action       => "plugin",
+          :project_id   => @project,
+          :id           => b.id}) if b.mayedit
+      %>
+    </td>
+  </tr>
+<% end %>
+</table>
+
+<p class="pagination"><%= pagination_links_full(@plugins_pages, @plugins_count) %></p>
+
+<%= render :partial => 'sidebar' %>
+
