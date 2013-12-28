@@ -64,7 +64,9 @@
   <tbody>
 <% @versions.each do |a| %>
   <tr>
-    <td class="icon <%= a.published == 1 && a.status == 'a' ? 'spmc-icon-accept' : 'spmc-icon-stop' %>"><%= a.published && a.status == 'a' ? "Yes" : "No" %></td>
+    <td>
+      <span class="icon <%= a.published == 1 && a.status == 'a' ? 'spmc-icon-accept' : 'spmc-icon-stop' %>"><%= a.published == 1 && a.status == 'a' ? "Yes" : "No" %></span>
+    </td>
     <td><%= a.version %></td>
     <td><%= distance_of_time_in_words(Time.now, Time.at(a.created)) %> ago</td>
     <td><%= a.author %></td>

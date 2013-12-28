@@ -1,4 +1,4 @@
-<h2>Plugins owned by <%= link_to_user User.current %></h2>
+<h2>Plugins</h2>
 
 <table class="list spmc-list">
 
@@ -14,7 +14,7 @@
 <% @plugins.each do |b| %>
   <tr>
     <td>
-      <%= link_to(b.title, {
+      <%= link_to(b.id, {
           :controller   => "plugins",
           :action       => "plugin",
           :project_id   => @project,
