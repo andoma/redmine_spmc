@@ -48,7 +48,7 @@ class PluginsController < ApplicationController
 
   def allplugins
     id = @project.identifier
-    @plugins_count = Plugin.count({:userid => User.current.id})
+    @plugins_count = Plugin.count({:admin => 1})
     @plugins_pages = Paginator.new(self, @plugins_count,
                                    per_page_option, params["page"])
     @plugins = Plugin.find(:all,
