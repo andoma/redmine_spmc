@@ -12,7 +12,7 @@ get  'plugins/:project_id/plugin/:id', :to => 'plugins#plugin', as: 'plugin', co
 
 put  'plugins/:project_id/plugin/:id', :to => 'plugins#save', constraints: {id: /[^\/]+/}
 
-post  'plugins/:project_id/plugin/:id/ingest', :to => 'plugins#ingest'
+post  'plugins/:project_id/plugin/:id/ingest', :to => 'plugins#ingest', constraints: {id: /[^\/]+/}
 
 post 'plugins/:project_id/plugin/:plugin_id/version/:version/delete',    :to => 'plugin_versions#delete',    constraints: {version: /[^\/]+/, plugin_id: /[^\/]+/}
 post 'plugins/:project_id/plugin/:plugin_id/version/:version/publish',   :to => 'plugin_versions#publish',   constraints: {version: /[^\/]+/, plugin_id: /[^\/]+/}
